@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>exer_alone_6</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+</head>
+<style>
+    #show {
+        padding-top: 10px;
+    }
+</style>
+<!-- 
+	남은 과제.
+		1. 등록 창에서 음수 값이나 숫자 크기에 대한 제한 + 경고창.
+		2. 등록 창에서 학년이랑 반을 지정하지 않을 경우 String값이라 값이 들어가지 않음. 값 지정해 달라고 촉구하는 문구 출력.
+		3. 등록 창에서 학생 이름도 양식을 지정할 수 있을랑가? ex) 한글로 최소최대 몇 글자
+		4. 수정 창에서 성별을 양식대로만 제출할 수 있게 ~> option 먹일까?
+		5. 수정 창에서 데이터 타입 및 등록 창과 똑같은 문제.
+		6. 삭제를 안 했는데 했는 거처럼 보이도록 만들어 보자. (실제로 삭제 기능을 쓰지 않는다. 삭제하면 안 된다. 데이터는 삭제하는 거 아니다.)
+		7. 핸드폰 숫자 제한 <정규식> 검색해 볼 것.
+-->
+<script>
+    // 전체 출력
+    $(document).ready(function(){
+
+        $.ajax ({
+            url : '/WebProject/allStudent',
+            dataType : 'json',
+            success : function(res){
+
+                let sTable = $('<table />').attr('border', '1');
+                sTable.append(addTitle());
+                console.log(res);
+
+                for(let i = 0; i < res.length; i++){
+                    
+                    let sTr = $('<tr />');
+                    let updateBtn = $('<button onclick = "updateStudent('+i+')" />').html('수정');
+                    let deleteBtn = $('<button onclick = "deleteStudent('+i+')" />').html('삭제');
+
+                    sTr.append(
+                        $('<td />').append($('<input type = "number" disabled id = "studentCode'+i+'">').val(res[i].studentCode)),
+                        $('<td />').append($('<input type = "text" id = "studentName'+i+'">').val(res[i].studentName)),
+                        $('<td />').append($('<input type = "number" id = "studentGrade'+i+'" min = "1" max = "3">').val(res[i].studentGrade)),
+                        $('<td />').append($('<input type = "number" id = "studentClass'+i+'" min = "1" max = "9">').val(res[i].studentClass)),
+                        $('<td />').append($('<input type = "text" id = "studentGender'+i+'">').val(res[i].studentGender)),
+                        $('<td />').html(updateBtn),
+                        $('<td />').html(deleteBtn)
+                    );
+
+                    sTable.append(sTr);
+                }
+                $('#show').append(sTable);
+            },
+            error : function(err){
+                console.log(err);
+            }
+        });
+    });
+
+    // 테이블 제목
+    function addTitle (){
+
+        let sTitle = $('<tr />');
+        sTitle.append(
+            $('<th />').html('학생 코드'),
+            $('<th />').html('학생 이름'),
+            $('<th />').html('학생 학년'),
+            $('<th />').html('학생 반'),
+            $('<th />').html('학생 성별'),
+            $('<th />').html('수정'),
+            $('<th />').html('삭제')
+        );
+        
+        return sTitle;
+    }
+
+    // 제출
+    function submit(){
+
+        let co = document.getElementsByName('studentCode')[0].value;
+        let na = document.getElementsByName('studentName')[0].value;
+        let gr = document.getElementById('studentGrade').value;
+        let cl = document.getElementById('studentClass').value;
+        let ge = document.getElementsByName('studentGender')[0].value;
+        
+        let data = {
+            'studentCode' : co,
+            'studentName' : na,
+            'studentGrade' : gr,
+            'studentClass' : cl,
+            'studentGender' : ge
+        };
+
+        $.ajax({
+            url : '/WebProject/insertStudent',
+            data : data,
+            dataType : 'json',
+            type : 'post',
+            success : function(){
+                alert('등록');
+                location.reload();
+            },
+            error : function(err){
+                console.log(err);
+            }
+        });
+    }
+
+    // 수정
+    function updateStudent(index){
+
+        let data = {
+            'studentCode' : $('#studentCode' + index).val(),
+            'studentName' : $('#studentName' + index).val(),
+            'studentGrade' : $('#studentGrade' + index).val(),
+            'studentClass' : $('#studentClass' + index).val(),
+            'studentGender' : $('#studentGender' + index).val()
+        };
+
+        $.ajax({
+            url : '/WebProject/updateStudent',
+            data : data,
+            dataType : 'json',
+            type : 'post',
+            success : function(){
+                alert('수정')
+                location.reload();
+            },
+            error : function(err){
+                console.log(err);
+            }
+        });
+    }
+
+    // 삭제
+    function deleteStudent(index){
+
+        let data = { 'studentCode' : $('#studentCode' + index).val() };
+
+        $.ajax({
+            url : '/WebProject/deleteStudent',
+            data : data,
+            dataType : 'json',
+            type : 'post',
+            success : function(){
+                alert('삭제')
+                location.reload();
+            },
+            error : function(err){
+                console.log(err);
+            }
+        });
+    }
+    
+</script>
+
+<body>
+    <table border="1">
+        <caption>학생 등록</caption>
+        <tr>
+            <td>학생 번호</td>
+            <td><input type="number" name="studentCode" max = "200"></td>
+        </tr>
+        <tr>
+            <td>학생 이름</td>
+            <td><input type="text" name="studentName"></td>
+        </tr>
+        <tr>
+            <td>학년</td>
+            <td>
+                <select id = "studentGrade">
+                    <option value="">골라 봐</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>반</td>
+            <td>
+                <select id = "studentClass">
+                    <option value="">골라 봐</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>성별</td>
+            <td>
+                <input type="radio" value = "M" checked = "checked" name="studentGender">남
+                <input type="radio" value = "W" name="studentGender">여
+            </td>
+        </tr>
+        <tr>
+            <th colspan="2">
+                <input type="submit" onclick="submit()" value="등록">
+                <input type="reset" value="취소">
+            </th>
+        </tr>
+    </table>
+    <div id="show"></div>
+</body>
+
+</html>

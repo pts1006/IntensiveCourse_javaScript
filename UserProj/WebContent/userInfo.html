@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>userInfo.html</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <style>
+        caption {
+            text-align: left;
+            font-weight: bold;
+        }
+
+        #show {
+            padding-top: 15px;
+        }
+        
+    </style>
+    <script>
+    
+        // DB 데이터를 화면에 출력
+        $(document).ready(function () {
+            $.ajax({
+                url: '/UserProj/getUserListServlet',
+                dataType: 'json',
+                success: function (result) {
+                	console.log(result);
+                	const table = $('<table id = "tab"/>').attr('border', '1');
+                    table.append(getTitle());
+                    
+                    for (let i = 0; i < result.length; i++) {
+                    	
+                    	let $tr = $('<tr />');
+
+                        let modifyBtn = $('<button onclick="ModifyUser('+i+')" />').html('수정');
+                        
+                        $tr.append(
+                            $('<td />').append($('<input type = "text" disabled id ="userID'+i+'">').val(result[i].userID)),
+                            $('<td />').append($('<input type = "text" id ="name'+i+'">').val(result[i].name)),
+                            $('<td />').append($('<input type = "text" id ="userPass'+i+'">').val(result[i].userPass)),
+                            $('<td />').append($('<input type = "text" id ="phone'+i+'">').val(result[i].phone)),
+                            $('<td />').append($('<input type = "text" id ="gender'+i+'">').val(result[i].gender)),
+                            $('<td />').html(modifyBtn)
+                        );
+                        
+                        table.append($tr);
+                    }
+                    $('#show').append(table);
+
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        });
+
+        // 테이블 타이틀
+        function getTitle() {
+            let $title = $('<tr />');
+            $title.append(
+                $('<th />').html('회원번호'),
+                $('<th />').html('이름'),
+                $('<th />').html('비밀번호'),
+                $('<th />').html('연락처'),
+                $('<th />').html('성별'),
+                $('<th />').html('기능')
+            );
+            return $title;
+        };
+        
+        // 수정 버튼 클릭
+        function ModifyUser(index) {
+        	console.log($("#userID"+index).val());
+			let data = {
+				"userID": $("#userID"+index).val(),
+				"name": $("#name"+index).val(),
+				"userPass": $("#userPass"+index).val(),
+				"phone": $("#phone"+index).val(),
+				"gender": $("#gender"+index).val()
+			};
+			console.log(data);
+			
+            // 서버와 통신하려면 name이들어가야돼
+            
+            $.ajax({
+                url: '/UserProj/modifyUserServlet',
+                data: data,
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    window.alert('수정됨.');
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <form id='frm' action='/UserProj/uploadUserServlet' method='get' enctype='multipart/form-data'>
+
+        <table border="1">
+            <caption>
+                <등록화면>
+            </caption>
+            <tr>
+                <td>사용ID</td>
+                <td><input type="text" name="userID"></td>
+            </tr>
+            <tr>
+                <td>이름</td>
+                <td><input type="text" name="name"></td>
+            </tr>
+            <tr>
+                <td>비밀번호</td>
+                <td><input type="text" name="userPass"></td>
+            </tr>
+            <tr>
+                <td>연락처</td>
+                <td><input type="text" name="phone"></td>
+            </tr>
+            <tr>
+                <td>성별</td>
+                <td>
+                    <input type="radio" name="gender" value="m" checked = "checked"> 남성
+                    <input type="radio" name="gender" value="w"> 여성
+                </td>
+            </tr>
+            <tr>
+                <th colspan="2">
+                    <input type="submit" value="등록">
+                    <input type="reset" value="취소">
+                </th>
+            </tr>
+        </table>
+
+    </form>
+
+    <div id="show"></div>
+</body>
+
+</html>

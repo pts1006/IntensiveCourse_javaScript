@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ajax_jquery.html</title>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <!--
+        제이쿼리 수업
+        앞에서 만든 ajax 파일을 제이쿼리로 바꾼다.
+    -->
+    <script>
+        $(document).on('DOMContentLoaded', function () {
+
+            var frm = $('#frm');
+            frm.on('submit', function (e) {
+                e.preventDefault();
+
+                var ln = $('#last_name').val();
+                var em = $('#email').val();
+                var hd = $('#hire_date').val();
+                var ji = $('#job_id').val();
+                var fn = $('#first_name').val();
+                var sa = $('#salary').val();
+
+                var data = 'first_name=' + fn +
+                    '&last_name=' + ln +
+                    '&email=' + em +
+                    '&hire_date=' + hd +
+                    '&job_id=' + ji +
+                    '&salary=' + sa;
+
+                $.ajax({
+                    url: 'empList.do',
+                    type: 'post',
+                    data: data,
+                    success: function (result) {
+                        var obj = JSON.parse(result);
+                        var trTag = $('<tr />');
+                        for (var field in obj) {
+                            $('<td />').html(obj[field]);
+                            trTag.append(tdTag);
+                        }
+                        var td = $('<td />');
+                        var btn = $('<button />').html('삭제');
+                        td.append(btn);
+                        trTag.append(td);
+                        table.append(trTag);
+                    },
+                    error: function (reject) {
+                        console.error(
+                            `error : ${reject.status}, message : ${reject.statusText}`);
+                    }
+                }); //xhtp.onreadystatechange = function () { ~~~ 이게 너무 길어서 제이쿼리 방식으로 바꿈.
+
+                var xhtp = new XMLHttpRequest();
+                xhtp.open('post', 'empList.do');
+                xhtp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                xhtp.send(data);
+
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <!--아이디 값을 입력해 놓으면 다른 곳에서 가져가 쓰기 수월하다.-->
+    <form id="frm" action="empList.do" method="POST">
+        <!--처리방식 POST-->
+        FirstName : <input type="text" name="first_name" id="first_name"><br>
+        LastName : <input type="text" name="last_name" id="last_name"><br>
+        JobId : <input type="text" name="job_id" id="job_id"><br>
+        Email : <input type="text" name="email" id="email"><br>
+        HireDate : <input type="date" name="hire_date" id="hire_date"><br>
+        Salary : <input type="text" name="salary" id="salary"> <br>
+        <br> <input type="submit" value="저장"> <input type="reset" value="취소">
+    </form>
+
+    <br>
+
+    <div id="show"></div>
+    <script>
+        var title = {
+            employeeId: '사원번호',
+            firstName: '이름',
+            lastName: '성씨',
+            jobId: '직무',
+            email: '이메일',
+            hireDate: '입사일',
+            salary: '급여',
+            option: '기능'
+        };
+
+        /*
+            ajax 진행 과정
+            1. ~ 4.
+        */
+
+        // 1. XMLHttpRequest 오브젝트
+        var xhtp = new XMLHttpRequest();
+
+
+        // 2. callback 함수
+
+        xhtp.onreadystatechange = function () {
+
+            if (xhtp.readyState == 4 && xhtp.status == 200) {
+                var show = document.getElementById('show');
+                var obj = JSON.parse(xhtp.responseText);
+
+                // table tr td => div.appendChild();
+                var table = $('<table />');
+                //document.createElement('table');
+
+                table.attr('border', '1');
+                //table.setAttribute('border', '1');
+
+                /*
+                방법 1 : 폐기
+                
+                for (var i = 0; i < title.length; i++) {
+                    var sth = document.createElement('th');
+                    sth.innerHTML = title[i];
+                    trTitle.appendChild(sth);
+                }
+                table.appendChild(trTitle);
+                */
+
+                // 방법2.
+                /*
+                for (var field in title) {
+                    var sth = document.createElement('th');
+                    sth.innerHTML = title[field];
+                    trTitle.appendChild(sth);
+                }
+                table.appendChild(trTitle);
+                */
+
+                /*
+                방법 3.
+                for (var field in title){
+               		var td = document.createElement('th');
+                	var text = document.createTextNode(title[field]);
+                	td.appendChild(text);
+                	tr.appendChild(td);
+           		}
+                table.appendChild(trTitle);
+				*/
+
+                //방법 4. 제이쿼리
+                var tr = $('<tr />'); //document.createElement('tr');
+                for (var field in title) {
+                    var td = $('<th />').html(title[field]);
+                    tr.append(td);
+                }
+                table.append(tr);
+
+                // 배열의 개수만큼 tr 생성.
+                for (var data of obj) {
+                    var tr = $('<tr />'); //document.createElement('tr');
+
+                    for (var field in title) {
+                        if (field == 'func') {
+                            var td = $('<td />');
+                            var btn = $('<button />').html('삭제');
+                            td.append(btn);
+                            tr.append(td);
+                        } else {
+                            var td = $('<td />').html(data[field]);
+                            tr.append(td);
+                        }
+
+                        table.append(tr);
+
+                    }
+
+                    $('#show').append(table);
+
+                }
+
+                // 3. 오픈
+                xhtp.open('get', 'empList.do?dept=50');
+
+                // 4. 센드
+                xhtp.send();
+
+            }
+        }
+    </script>
+</body>
+
+</html>

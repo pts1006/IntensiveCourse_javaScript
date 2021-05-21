@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>firstEx.html</title>
+</head>
+<body>
+<!--
+
+첫 번째 예제.
+
+만들 예정 (설계도)
+
+FrontController(실행할 sub controller 등록) : 실제 기능들을 담아놓을 상자
+~> subController(servlet) : 실제 기능 담당
+
+com.dev.controller		: 컨트롤러
+com.dev.dao		: db처리
+com.dev.service		: 비즈니스 로직
+con.dev.vo		: 모델
+
+사용자 화면 : memberDelete.jsp
+	memberInsert.jsp
+	memberSearch.jsp
+	memberUpdate.jsp
+
+처리 결과(view) : memberDeleteOutput.jsp
+
+
+
+'회원 추가' 작동 경로
+memberInsert.jsp ~> FrontController.java ~> MemberInsertController.java
+~> MemberService.java ~> MemberDAO.java ~> membeInsertOutput.jsp
+
+
+'회원 정보 검색' 작동 경로
+memberSearch.jsp ~> FrontController.java ~> MemberSearchController.java
+~> MemberService.java ~> MemberDAO.java ~> memberSearchOutput.jsp
+
+'회원 정보 수정' 작동 경로
+memberUpdate.jsp ~> FrontController.java ~> MemberUpdateController.java
+~> MemberService.java ~> MemberDAO.java ~> memberUpdateOutput.jsp
+
+-->
+</body>
+</html>
