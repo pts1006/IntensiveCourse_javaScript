@@ -13,9 +13,23 @@
 		
 		frm.submit();
 	}
+	
+	function noticeDelete(){
+		
+		let id = document.getElementById("cId").innerHTML;
+		
+		frm2.id.value = id;
+		
+		frm2.submit();
+		
+	}
 </script>
 <div align = "center">
 	<h3>공지사항 내용 보기</h3>
+	<form id = "frm2" action = "noticeDelete.do" method = "POST">
+		<input type = "hidden" name = "id">
+	</form>
+	
 	<form id = "frm" action = "noticeUpdate.do" method = "POST">
 		<input type = "hidden" name = "id">
 		<input type = "hidden" name = "title">
@@ -47,6 +61,7 @@
 		<button type ="button" onclick = "location.href='noticeList.do'">목록 보기</button>
 		<c:if test = "${id eq 'admin' }">
 			<button type ="button" onclick = "noticeUpdate()">수정</button>
+			<button type ="button" onclick = "noticeDelete()">삭제</button>
 		</c:if>
 	</div>
 </div>

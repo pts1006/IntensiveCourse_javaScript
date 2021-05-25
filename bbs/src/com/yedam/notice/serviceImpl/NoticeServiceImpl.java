@@ -26,6 +26,49 @@ public class NoticeServiceImpl extends DAO implements NoticeService {
 		}
 	}
 
+	// 페이징 목록
+	public List<NoticeVO> noticeListPaging(int page){
+		
+		String sql = "select b.*\r\n"
+				+ "from (select rownum rn,a.* from (select * from notice order by id)a )b\r\n"
+				+ "where b.rn between ? and ?";
+
+		List<NoticeVO> list = new ArrayList<>();
+		
+		int firstCnt = 0, lastCnt = 0;
+		firstCnt = (page - 1) * 10 + 1;	// 1, 11
+		lastCnt = (page * 10);	// 10, 20
+		
+		try {
+			psmt = conn.prepareStatement(sql);
+			
+			psmt.setInt(1, firstCnt);
+			psmt.setInt(2, lastCnt);
+			
+			rs = psmt.executeQuery();
+			
+			while(rs.next()) {
+				
+				NoticeVO vo = new NoticeVO();
+				
+				vo.setContent(rs.getString("content"));
+				vo.setHit(rs.getInt("hit"));
+				vo.setId(rs.getInt("id"));
+				vo.setRegDate(rs.getDate("reg_date"));
+				vo.setTitle(rs.getString("title"));
+				
+				list.add(vo);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		
+		return list;
+	}
+	
 	@Override
 	public List<NoticeVO> noticeSelectList() {
 		
@@ -86,11 +129,24 @@ public class NoticeServiceImpl extends DAO implements NoticeService {
 	@Override
 	public int insertNotice(NoticeVO vo) {
 		
-		String sql = "insert into notice values(?, ?, ?, ?, ?)";
+		String sql = "insert into notice values(notice_seq.nextval, ?, ?, sysdate, 0)";
 		int result = 0;
 		
 		try {
 			psmt = conn.prepareStatement(sql);
+			
+			psmt.setString(1, vo.getTitle());
+			psmt.setString(2,vo.getContent());
+			
+			result = psmt.executeUpdate();
+			
+			if(result != 0) {
+				System.out.println(result + "건 입력");
+				System.out.println(vo.toString());
+			} else {
+				System.out.println("입력 안 됨.");
+			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -134,11 +190,22 @@ public class NoticeServiceImpl extends DAO implements NoticeService {
 	@Override
 	public int deleteNotice(NoticeVO vo) {
 		
-		String sql = "";
+		String sql = "delete from notice where id =?";
 		int result = 0;
 		
 		try {
 			psmt = conn.prepareStatement(sql);
+			psmt.setInt(1, vo.getId());
+			
+			result = psmt.executeUpdate();
+			
+			if(result != 0) {
+				System.out.println(result + "건 삭제");
+				System.out.println(vo.toString());
+			} else {
+				System.out.println("삭제 안 됨.");
+			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
