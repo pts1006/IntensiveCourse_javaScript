@@ -12,6 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.yedam.member.web.MemberJoin;
 import com.yedam.member.web.MemberJoinForm;
+import com.yedam.member.web.MemberLogin;
+import com.yedam.member.web.MemberLoginForm;
+import com.yedam.member.web.MemberLogout;
+import com.yedam.notice.web.Notice;
+import com.yedam.notice.web.NoticeList;
+import com.yedam.notice.web.NoticeUpdate;
 
 public class FrontController extends HttpServlet{
 
@@ -21,11 +27,19 @@ public class FrontController extends HttpServlet{
 	
 	@Override
 	public void init(ServletConfig config) throws ServletException {
-		// 요청 페이지 - 실행 컨트롤
 		
+		// 요청 페이지 - 실행 컨트롤
 		map.put("/main.do", new MainPage());
 		map.put("/memberJoinForm.do", new MemberJoinForm());
 		map.put("/memberJoin.do", new MemberJoin());
+		map.put("/memberLoginForm.do", new MemberLoginForm());
+		map.put("/memberLogin.do", new MemberLogin());
+		map.put("/memberLoginOut.do", new MemberLogout());
+		
+		// 공지사항
+		map.put("/noticeList.do", new NoticeList());
+		map.put("/notice.do", new Notice());
+		map.put("/noticeUpdate.do", new NoticeUpdate());
 	}
 	
 	@Override

@@ -25,6 +25,41 @@ public class MemberServiceImpl extends DAO implements MemberService {
 		}
 	}
 	
+	// ID와 Password를 체크해 주는 메소드
+	public MemberVO loginCheck(MemberVO vo) {
+		
+		String sql = "select * from member where id = ? and passwd = ?";
+		MemberVO rvo = null;
+		
+		// Public boolean으로 할 수도 있음.
+//		boolean exist = false;
+		try {
+			psmt = conn.prepareStatement(sql);
+			
+			psmt.setString(1, vo.getId());
+			psmt.setString(2, vo.getPasswd());
+			
+			rs = psmt.executeQuery();
+			
+			if(rs.next()) {
+//				exist = true;
+				rvo = new MemberVO();
+				rvo.setId(rs.getString("id"));
+				rvo.setPasswd(rs.getString("passwd"));
+				rvo.setName(rs.getString("name"));
+				rvo.setAddress(rs.getString("address"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		
+		return rvo;
+//		return exist;
+	}
+	
 	// ID 중복 여부 체크 메소드
 	public boolean idCheck(String id) {
 
@@ -100,6 +135,14 @@ public class MemberServiceImpl extends DAO implements MemberService {
 		String sql = "update member set passwd = ?, name = ?, address = ? where id = ?";
 		
 		int result = 0;
+		
+		try {
+			psmt = conn.prepareStatement(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
 		
 		return result;
 	}
