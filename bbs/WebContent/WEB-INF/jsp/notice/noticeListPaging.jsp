@@ -36,7 +36,7 @@
 		<input type="hidden" id="id" name="id">
 	</form>
 	<div align="center">
-		<div style="width: 60%">
+		<div style="width: 80%">
 			<table class="table" border="1">
 				<tr>
 					<th width="100">순번</th>
