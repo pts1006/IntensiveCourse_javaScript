@@ -17,7 +17,7 @@ public class CartList implements DbCommand {
 		String id = request.getParameter("id");
 		
 		ProductServiceImpl serv = new ProductServiceImpl();
-		List<CartVO> list = serv.findCart(id);
+		List<CartVO> list = serv.showCart(id);
 		
 		request.setAttribute("list", list);
 		

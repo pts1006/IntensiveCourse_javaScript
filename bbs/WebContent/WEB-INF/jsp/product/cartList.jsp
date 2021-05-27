@@ -25,7 +25,7 @@
 			<td>${vo.itemName }</td>
 			<td>${vo.salePrice }</td>
 			<td>${vo.likeIt }</td>
-			<td><img src="upload/${vo.itemImage }" width= "150px" height= "150px" alt="..." /></td>
+			<td><img src="upload/${vo.itemImage }" width= "150px" height= "150px" /></td>
 			<td>${vo.qty }</td>
 		</tr>
 	</c:forEach>

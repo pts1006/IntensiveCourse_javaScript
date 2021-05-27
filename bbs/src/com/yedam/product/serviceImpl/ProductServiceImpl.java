@@ -32,7 +32,7 @@ public class ProductServiceImpl extends DAO implements ProductService {
 	}
 
 	// ID로 장바구니 조회
-	public List<CartVO> findCart(String id) {
+	public List<CartVO> showCart(String id) {
 		
 		sql = "select *\r\n"
 				+ "from (select user_id, item_code, sum(item_qty) qty from cart group by user_id, item_code) cart, product p\r\n"
