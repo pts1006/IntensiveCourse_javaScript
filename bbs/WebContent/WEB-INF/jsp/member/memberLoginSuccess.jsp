@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <div>
-	<h1>${vo.name } 환영함.</h1>
+	<h1>${vo.name } 어서오고.</h1>
 </div>

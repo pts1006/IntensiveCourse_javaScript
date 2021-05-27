@@ -38,6 +38,7 @@ public class MemberLogin implements DbCommand {
 			request.setAttribute("vo", rvo);
 			
 			path = "member/memberLoginSuccess.tiles";
+			// 경로 이동이 아니라 페이지 유지시키고 싶은데
 		}
 		
 //		if(service.loginCheck(vo))

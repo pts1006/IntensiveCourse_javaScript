@@ -7,6 +7,6 @@
 <title></title>
 </head>
 <body>
-	<jsp:forward page = "main.do"></jsp:forward>
+	<jsp:forward page = "home.tiles"></jsp:forward>
 </body>
 </html>
