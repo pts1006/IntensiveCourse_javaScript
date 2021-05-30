@@ -63,10 +63,10 @@ public class FrontController extends HttpServlet{
 		// 게시글 관련
 		map.put("/bulletinList.do", new BulletinList());
 		map.put("/bulletinListPaging.do", new BulletinListPaging());
-		map.put("/bulletinForm.do", new BulletinForm());
+		map.put("/bulletinForm.do", new BulletinForm());	// 경로 지정 잘하면 굳이 필요 없는 애.
 		map.put("/bulletinInsert.do", new BulletinInsert());
 		map.put("/bulletinSelect.do", new BulletinSelect());
-		map.put("/bulletinDelete.do", new BulletinDelete());
+		map.put("/bulletinDelete.do", new BulletinDelete());	// 경로 지정 및 form태그 한 번 더 쓰게 되면 굳이 필요 없는 애.
 		map.put("/bulletinUpdate.do", new BulletinUpdate());
 		
 		// 상품 관련
