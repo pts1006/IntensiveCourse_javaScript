@@ -63,7 +63,7 @@ public class FrontController extends HttpServlet{
 		// 게시글 관련
 		map.put("/bulletinList.do", new BulletinList());
 		map.put("/bulletinListPaging.do", new BulletinListPaging());
-		map.put("/bulletinForm.do", new BulletinForm());	// 경로 지정 잘하면 굳이 필요 없는 애.
+		map.put("/bulletinForm.do", new BulletinForm());	// 경로 지정 잘하면 굳이 필요 없는 애. ~> 비정상적으로 작동하네? delete는 서블릿으로 작동하니까 필요없다 쳐도 얘는 아닌가 본데? 필요한가 본데?
 		map.put("/bulletinInsert.do", new BulletinInsert());
 		map.put("/bulletinSelect.do", new BulletinSelect());
 		map.put("/bulletinDelete.do", new BulletinDelete());	// 경로 지정 및 form태그 한 번 더 쓰게 되면 굳이 필요 없는 애.
