@@ -14,7 +14,9 @@
     <script>
 
         // 화면에 출력
-        //$(document).ready(function()
+        //$(document).ready(function()	~> 사용을 피하는 것이 좋다고 한다. ($function() 또한 그러한지는 모름.)
+        		// https://euntori7.tistory.com/356
+        		// https://github.com/codepink/codepink.github.com#weekly-pick
         $(function(){
             $.ajax({
                 url: '/WebProject/allDogListServlet',
